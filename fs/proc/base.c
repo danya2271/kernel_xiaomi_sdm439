@@ -101,6 +101,16 @@
 
 #include "../../lib/kstrtox.h"
 
+/* Create an array with the apps to kill if
+   they get in background */
+#define MAX_APP_STRINGSIZE 50
+char apps[][MAX_APP_STRINGSIZE] =
+{ "ndroid.settings",
+  "id.GoogleCamera"
+};
+// Get size of apps array
+int NUMBER_OF_STRINGS = sizeof(apps) / sizeof(apps[0]);
+
 struct task_kill_info {
 	struct task_struct *task;
 	struct work_struct work;
@@ -1287,6 +1297,7 @@ static ssize_t oom_score_adj_read(struct file *file, char __user *buf,
 static ssize_t oom_score_adj_write(struct file *file, const char __user *buf,
 					size_t count, loff_t *ppos)
 {
+        int i;
 	char task_comm[TASK_COMM_LEN];
 	struct task_struct *task;
 	char buffer[PROC_NUMBUF];
@@ -1316,17 +1327,20 @@ static ssize_t oom_score_adj_write(struct file *file, const char __user *buf,
 
 out:
 	/* These apps burn through CPU in the background. Don't let them. */
-	if (!err && oom_score_adj >= 700) {
-		if (!strcmp(task_comm, "id.GoogleCamera") ||
-		    !strcmp(task_comm, "ndroid.settings")) {
-			struct task_kill_info *kinfo;
+        /* Iterate from the "apps" array and kill any app in background
+           that is declared. */
+	for (i = 0; i < NUMBER_OF_STRINGS; i++) {
+		if (!err && oom_score_adj >= 700) {
+			if (!strcmp(task_comm, apps[i])) {
+				struct task_kill_info *kinfo;
 
-			kinfo = kmalloc(sizeof(*kinfo), GFP_KERNEL);
-			if (kinfo) {
-				get_task_struct(task);
-				kinfo->task = task;
-				INIT_WORK(&kinfo->work, proc_kill_task);
-				schedule_work(&kinfo->work);
+				kinfo = kmalloc(sizeof(*kinfo), GFP_KERNEL);
+				if (kinfo) {
+					get_task_struct(task);
+					kinfo->task = task;
+					INIT_WORK(&kinfo->work, proc_kill_task);
+					schedule_work(&kinfo->work);
+				}
 			}
 		}
 	}
