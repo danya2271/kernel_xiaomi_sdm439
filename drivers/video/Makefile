@@ -1,3 +1,7 @@
+ifdef CONFIG_ARCH_MSM8937
+KBUILD_CFLAGS += -mcpu=cortex-a53 -Wa,-mcpu=cortex-a53 -mtune=cortex-a53
+KBUILD_LDFLAGS := -mcpu=cortex-a53 -mtune=cortex-a53
+endif
 obj-$(CONFIG_VGASTATE)            += vgastate.o
 obj-$(CONFIG_HDMI)                += hdmi.o
 

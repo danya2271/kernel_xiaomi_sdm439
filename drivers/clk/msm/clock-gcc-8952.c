@@ -788,7 +788,7 @@ static struct clk_freq_tbl ftbl_gcc_oxili_gfx3d_clk_sdm439[] = {
 	F_SLEW( 450000000, 900000000,	  gpll3,	1,	0,	0),
 	F_SLEW( 510000000, 1020000000,	  gpll3,	1,	0,	0),
 	F_SLEW( 560000000, 1120000000,	  gpll3,	1,	0,	0),
-	F_SLEW( 900000000, 1808000000,	  gpll3,	1,	0,	0),
+	F_SLEW( 870000000, 1808000000,	  gpll3,	1,	0,	0),
 	F_END
 };
 
