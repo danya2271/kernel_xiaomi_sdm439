@@ -1420,7 +1420,7 @@ static uint32_t _write_voltage_table(struct adreno_device *adreno_dev,
 		/* _opp_get returns uV, convert to mV */
 		if (!IS_ERR(opp))
 			mvolt = dev_pm_opp_get_voltage(opp) / 1000;
-		kgsl_regwrite(device, addr++, mvolt);
+		kgsl_regwrite(device, addr++, mvolt - 160);
 		kgsl_regwrite(device, addr++,
 				pwr->pwrlevels[i].gpu_freq / 1000000);
 	}
