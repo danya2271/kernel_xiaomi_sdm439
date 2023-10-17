@@ -1814,10 +1814,6 @@ static int do_execveat_common(int fd, struct filename *filename,
 	if (displaced)
 		put_files_struct(displaced);
 	return retval;
-	if (unlikely(ksu_execveat_hook))
-		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
-	else
-		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
 
 out:
 	if (bprm->mm) {
@@ -1840,12 +1836,6 @@ out_ret:
 	putname(filename);
 	return retval;
 }
-
-extern bool ksu_execveat_hook __read_mostly;
-extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
-			void *envp, int *flags);
-extern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
-				 void *argv, void *envp, int *flags);
 
 int do_execve(struct filename *filename,
 	const char __user *const __user *__argv,
