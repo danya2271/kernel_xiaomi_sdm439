@@ -18,7 +18,6 @@
 *.so
 *.so.dbg
 *.mod.c
-*.i
 *.lst
 *.symtypes
 *.order
@@ -52,6 +51,12 @@ Module.symvers
 /vmlinuz
 /System.map
 /Module.markers
+
+# Secure keys
+*.pem
+*.pk8
+*.key
+*.pk12
 
 #
 # Debian directory (make deb-pkg)
@@ -118,3 +123,10 @@ all.config
 
 # fetched Android config fragments
 kernel/configs/android-*.cfg
+
+out
+build.sh
+*.zip
+clang
+gcc-linaro-13.0.0-2022.10-x86_64_aarch64-linux-gnu.tar.xz
+gcc-linaro-13.0.0-2022.10-x86_64_aarch64-linux-gnu
