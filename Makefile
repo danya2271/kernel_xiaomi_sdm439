@@ -828,8 +828,6 @@ KBUILD_CFLAGS += -Wno-asm-operand-widths
 KBUILD_CFLAGS += -Wno-initializer-overrides
 KBUILD_CFLAGS += -fno-builtin
 
-# Enable MLGO for register allocation.
-KBUILD_CFLAGS   += -mllvm -regalloc-enable-advisor=release
 # Enable hot cold split optimization
 KBUILD_CFLAGS   += -mllvm -hot-cold-split=true
 
