@@ -107,8 +107,6 @@ struct lpm_history {
 
 static DEFINE_PER_CPU(struct lpm_history, hist);
 
-static bool cluster_use_deepest_state = true;
-module_param(cluster_use_deepest_state, bool, 0664);
 static DEFINE_PER_CPU(struct lpm_cpu*, cpu_lpm);
 static bool suspend_in_progress;
 static struct hrtimer lpm_hrtimer;
@@ -149,11 +147,6 @@ uint32_t register_system_pm_ops(struct system_pm_ops *pm_ops)
 	sys_pm_ops = pm_ops;
 
 	return 0;
-}
-
-void lpm_cluster_use_deepest_state(bool enable)
-{
-	cluster_use_deepest_state = enable;
 }
 
 static uint32_t least_cluster_latency(struct lpm_cluster *cluster,
@@ -971,8 +964,6 @@ static int cluster_select(struct lpm_cluster *cluster, bool from_idle,
 		if (predicted && (pred_us == cpupred_us))
 			predicted = 2;
 	}
-	if (cluster_use_deepest_state)
-		return cluster_select_deepest(cluster);
 
 	if (cpumask_and(&mask, cpu_online_mask, &cluster->child_cpus))
 		latency_us = pm_qos_request_for_cpumask(PM_QOS_CPU_DMA_LATENCY,
