@@ -15,7 +15,7 @@ ifeq ($(CONFIG_ARCH_SDXPOORWILLS), y)
 include $(srctree)/techpack/audio/config/sdxpoorwillsauto.conf
 export
 endif
-
+KBUILD_CFLAGS += $(DISABLE_LTO)
 KBUILD_CFLAGS += -Wno-address-of-packed-member
 
 # Use USERINCLUDE when you must reference the UAPI directories only.
