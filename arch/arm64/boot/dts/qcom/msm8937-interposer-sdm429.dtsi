@@ -39,15 +39,6 @@
 	};
 };
 
-&funnel_apss {
-	ports {
-		/delete-node/ port@1;
-		/delete-node/ port@2;
-		/delete-node/ port@3;
-		/delete-node/ port@4;
-	};
-};
-
 &thermal_zones {
 	hexa-cpu-max-step {
 		cooling-maps {

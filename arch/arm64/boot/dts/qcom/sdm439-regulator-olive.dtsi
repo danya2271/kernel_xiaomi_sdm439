@@ -160,9 +160,9 @@
 	rpm-regulator-ldoa3 {
 		status = "okay";
 		pm8953_l3: regulator-l3 {
-			regulator-min-microvolt = <910000>;
+			regulator-min-microvolt = <850000>;
 			regulator-max-microvolt = <1200000>;
-			qcom,init-voltage = <910000>;
+			qcom,init-voltage = <850000>;
 			status = "okay";
 		};
 	};
@@ -247,9 +247,9 @@
 	rpm-regulator-ldoa10 {
 		status = "okay";
 		pm8953_l10: regulator-l10 {
-			regulator-min-microvolt = <2948000>;
-			regulator-max-microvolt = <3300000>;
-			qcom,init-voltage = <2948000>;
+			regulator-min-microvolt = <3400000>;
+			regulator-max-microvolt = <3400000>;
+			qcom,init-voltage = <3400000>;
 			status = "okay";
 		};
 	};
@@ -370,7 +370,7 @@
 		};
 	};
 };
-
+#define MAX_VOLT 850000
 &spmi_bus {
 	qcom,pm8953@1 {
 		/* PM8953 S5 + S6 = VDD_APC_supply */
@@ -379,12 +379,12 @@
 			reg = <0x2000 0x100>;
 			regulator-name = "pm8953_s5";
 			regulator-min-microvolt = <490000>;
-			regulator-max-microvolt = <910000>;
+			regulator-max-microvolt = <MAX_VOLT>;
 
 			pm8953_s5_limit: avs-limit-regulator {
 				regulator-name = "pm8953_s5_avs_limit";
 				regulator-min-microvolt = <490000>;
-				regulator-max-microvolt = <910000>;
+				regulator-max-microvolt = <MAX_VOLT>;
 			};
 		};
 	};
@@ -422,8 +422,8 @@
 		regulator-max-microvolt = <6>;
 
 		qcom,cpr-fuse-corners = <3>;
-		qcom,cpr-voltage-ceiling = <740000 825000 910000>;
-		qcom,cpr-voltage-floor =   <660000 700000 770000>;
+		qcom,cpr-voltage-ceiling = <650000 800000 MAX_VOLT>;
+		qcom,cpr-voltage-floor =   <560000 670000 740000>;
 		vdd-apc-supply = <&pm8953_s5>;
 		mem-acc-supply = <&apc_mem_acc_vreg>;
 		qcom,mem-acc-corner-map = <1 1 1 1 2 2>;
@@ -445,7 +445,7 @@
 		qcom,cpr-fuse-row = <67 0>;
 		qcom,cpr-fuse-target-quot = <42 24 6>;
 		qcom,cpr-fuse-ro-sel = <60 57 54>;
-		qcom,cpr-init-voltage-ref = <760000 795000 910000>;
+		qcom,cpr-init-voltage-ref = <650000 795000 MAX_VOLT>;
 		qcom,cpr-fuse-init-voltage =
 					<67 36 6 0>,
 					<67 18 6 0>,
@@ -492,7 +492,7 @@
 			<50000 50000 65000 65000 65000 65000>;
 
 		qcom,cpr-voltage-ceiling-override =
-			<(-1) (-1) 790000 825000 865000 910000 910000 910000>;
+			<(-1) (-1) 730000 800000 825000 MAX_VOLT MAX_VOLT MAX_VOLT>;
 
 		qcom,cpr-virtual-corner-quotient-adjustment =
 			<0  0    0   0   0    0>,
