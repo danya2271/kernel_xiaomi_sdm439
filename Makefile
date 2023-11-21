@@ -722,7 +722,12 @@ KBUILD_LDFLAGS	+= $(POLLY_FLAGS)
 endif
 
 ifdef CONFIG_LTO_CLANG
+ifdef CONFIG_THINLTO
+lto-clang-flags	:= -flto=thin
+KBUILD_LDFLAGS	+= --thinlto-cache-dir=.thinlto-cache --thinlto-jobs=$(nproc --all)
+else
 lto-clang-flags	:= -flto -fvisibility=hidden
+endif
 
 # allow disabling only clang LTO where needed
 DISABLE_LTO_CLANG := -fno-lto -fvisibility=default
