@@ -711,17 +711,29 @@ KBUILD_CFLAGS	+= $(call cc-option,-ffunction-sections,)
 KBUILD_CFLAGS	+= $(call cc-option,-fdata-sections,)
 endif
 
-ifdef CONFIG_LTO_CLANG
-KBUILD_LDFLAGS  += --plugin-opt=-import-instr-limit=40
-endif
 ifdef CONFIG_POLLY_CLANG
 POLLY_FLAGS	+= -mllvm -polly \
 		   -mllvm -polly-ast-use-context \
 		   -mllvm -polly-detect-keep-going \
-		   -mllvm -polly-invariant-load-hoisting \
-		   -mllvm -polly-opt-fusion=max \
 		   -mllvm -polly-run-inliner \
 		   -mllvm -polly-vectorizer=stripmine
+
+ifeq ($(shell test $(CONFIG_CLANG_VERSION) -lt 160000; echo $$?),0)
+POLLY_FLAGS	+= -mllvm -polly-invariant-load-hoisting
+endif
+
+ifeq ($(shell test $(CONFIG_CLANG_VERSION) -gt 130000; echo $$?),0)
+POLLY_FLAGS	+= -mllvm -polly-loopfusion-greedy=1 \
+	     -mllvm -polly-reschedule=1 \
+	     -mllvm -polly-postopts=1 \
+	     -mllvm -polly-num-threads=0 \
+	     -mllvm -polly-omp-backend=LLVM \
+	     -mllvm -polly-scheduling=dynamic \
+	     -mllvm -polly-scheduling-chunksize=1
+else
+POLLY_FLAGS	+= -mllvm -polly-opt-fusion=max
+endif
+
 # Polly may optimise loops with dead paths beyound what the linker
 # can understand. This may negate the effect of the linker's DCE
 # so we tell Polly to perfom proven DCE on the loops it optimises
