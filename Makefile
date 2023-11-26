@@ -711,29 +711,17 @@ KBUILD_CFLAGS	+= $(call cc-option,-ffunction-sections,)
 KBUILD_CFLAGS	+= $(call cc-option,-fdata-sections,)
 endif
 
+ifdef CONFIG_LTO_CLANG
+KBUILD_LDFLAGS  += --plugin-opt=-import-instr-limit=40
+endif
 ifdef CONFIG_POLLY_CLANG
 POLLY_FLAGS	+= -mllvm -polly \
 		   -mllvm -polly-ast-use-context \
 		   -mllvm -polly-detect-keep-going \
+		   -mllvm -polly-invariant-load-hoisting \
+		   -mllvm -polly-opt-fusion=max \
 		   -mllvm -polly-run-inliner \
 		   -mllvm -polly-vectorizer=stripmine
-
-ifeq ($(shell test $(CONFIG_CLANG_VERSION) -lt 160000; echo $$?),0)
-POLLY_FLAGS	+= -mllvm -polly-invariant-load-hoisting
-endif
-
-ifeq ($(shell test $(CONFIG_CLANG_VERSION) -gt 130000; echo $$?),0)
-POLLY_FLAGS	+= -mllvm -polly-loopfusion-greedy=1 \
-	     -mllvm -polly-reschedule=1 \
-	     -mllvm -polly-postopts=1 \
-	     -mllvm -polly-num-threads=0 \
-	     -mllvm -polly-omp-backend=LLVM \
-	     -mllvm -polly-scheduling=dynamic \
-	     -mllvm -polly-scheduling-chunksize=1
-else
-POLLY_FLAGS	+= -mllvm -polly-opt-fusion=max
-endif
-
 # Polly may optimise loops with dead paths beyound what the linker
 # can understand. This may negate the effect of the linker's DCE
 # so we tell Polly to perfom proven DCE on the loops it optimises
@@ -744,7 +732,6 @@ endif
 KBUILD_CFLAGS += $(POLLY_FLAGS)
 KBUILD_AFLAGS += $(POLLY_FLAGS)
 KBUILD_LDFLAGS	+= $(POLLY_FLAGS)
-endif
 endif
 
 ifdef CONFIG_LTO_CLANG
@@ -864,32 +851,6 @@ KBUILD_CFLAGS += -fno-builtin
 
 # Enable hot cold split optimization
 KBUILD_CFLAGS   += -mllvm -hot-cold-split=true
-
-# Additional optimizations for better kernel speed
-KBUILD_CFLAGS +=  -mllvm -enable-load-pre
-KBUILD_CFLAGS +=  -mllvm -enable-loop-distribute
-KBUILD_CFLAGS +=  -mllvm -enable-post-misched
-KBUILD_CFLAGS +=  -mllvm -enable-pre
-KBUILD_CFLAGS +=  -mllvm -enable-tail-merge
-KBUILD_CFLAGS +=  -falign-functions
-KBUILD_CFLAGS +=  -fomit-frame-pointer
-KBUILD_CFLAGS +=  -funroll-loops
-KBUILD_CFLAGS +=  -fno-strict-aliasing
-KBUILD_LDFLAGS += -z separate-code
-KBUILD_LDFLAGS += -z lazy
-KBUILD_LDFLAGS += -z nocopyreloc
-KBUILD_LDFLAGS += -z now
-KBUILD_LDFLAGS += -z combreloc
-KBUILD_LDFLAGS += -O3
-KBUILD_LDFLAGS += -Wl,--icf=all
-KBUILD_LDFLAGS += --enable-relax-arch
-KBUILD_LDFLAGS += --disable-new-dtags
-KBUILD_AFLAGS += -ffunction-sections
-KBUILD_AFLAGS += -fdata-sections
-KBUILD_AFLAGS += -fno-exceptions
-KBUILD_AFLAGS += -fno-rtti
-KBUILD_AFLAGS += -fmerge-all-constants
-KBUILD_AFLAGS += -mrelax-all
 
 # Quiet clang warning: comparison of unsigned expression < 0 is always false
 KBUILD_CFLAGS += $(call cc-disable-warning, tautological-compare)
