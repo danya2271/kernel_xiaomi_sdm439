@@ -1421,7 +1421,7 @@ static uint32_t _write_voltage_table(struct adreno_device *adreno_dev,
 		if (!IS_ERR(opp))
 			mvolt = dev_pm_opp_get_voltage(opp) / 1000;
 		if (i==0) {
-		kgsl_regwrite(device, addr++, mvolt);
+		kgsl_regwrite(device, addr++, mvolt + 100);
 		} else {
 		kgsl_regwrite(device, addr++, mvolt - 260);
 		}

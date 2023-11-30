@@ -3,7 +3,9 @@
 #
 
 # Each configuration option enables a list of files.
-
+KBUILD_CFLAGS	+= -mllvm -inline-threshold=1600
+KBUILD_CFLAGS	+= -mllvm -inlinehint-threshold=1750
+KBUILD_CFLAGS   += -mllvm -unroll-threshold=20
 obj-$(CONFIG_INPUT)		+= input-core.o
 input-core-y := input.o input-compat.o input-mt.o ff-core.o
 

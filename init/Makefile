@@ -1,7 +1,7 @@
 #
 # Makefile for the linux kernel.
 #
-
+KBUILD_CFLAGS += $(DISABLE_LTO)
 ccflags-y := -fno-function-sections -fno-data-sections
 
 obj-y                          := main.o version.o mounts.o

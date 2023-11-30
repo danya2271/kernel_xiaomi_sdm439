@@ -1,5 +1,7 @@
 obj-$(CONFIG_F2FS_FS) += f2fs.o
-
+KBUILD_CFLAGS	+= -mllvm -inline-threshold=1600
+KBUILD_CFLAGS	+= -mllvm -inlinehint-threshold=1750
+KBUILD_CFLAGS   += -mllvm -unroll-threshold=20
 f2fs-y		:= dir.o file.o inode.o namei.o hash.o super.o inline.o
 f2fs-y		+= checkpoint.o gc.o data.o node.o segment.o recovery.o
 f2fs-y		+= shrinker.o extent_cache.o sysfs.o

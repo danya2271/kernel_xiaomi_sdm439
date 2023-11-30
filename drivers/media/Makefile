@@ -1,7 +1,7 @@
 #
 # Makefile for the kernel multimedia device drivers.
 #
-
+KBUILD_CFLAGS += -Oz
 ifeq ($(CONFIG_MEDIA_CEC_EDID),y)
   obj-$(CONFIG_MEDIA_SUPPORT) += cec-edid.o
 endif

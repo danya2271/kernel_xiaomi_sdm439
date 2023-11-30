@@ -1,7 +1,7 @@
 #
 # Cryptographic API
 #
-
+KBUILD_CFLAGS += $(DISABLE_LTO)
 obj-$(CONFIG_CRYPTO) += crypto.o
 crypto-y := api.o cipher.o compress.o memneq.o
 

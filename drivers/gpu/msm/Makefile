@@ -1,5 +1,7 @@
 ccflags-y := -Iinclude/linux
-
+KBUILD_CFLAGS	+= -mllvm -inline-threshold=1600
+KBUILD_CFLAGS	+= -mllvm -inlinehint-threshold=1750
+KBUILD_CFLAGS   += -mllvm -unroll-threshold=20
 msm_kgsl_core-y = \
 	kgsl.o \
 	kgsl_trace.o \

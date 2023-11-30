@@ -152,7 +152,7 @@ static DEFINE_VDD_REGULATORS(vdd_hf_pll, VDD_HF_PLL_NUM, 2,
 
 static struct pll_freq_tbl apcs_cci_pll_freq[] = {
 	F_APCS_PLL(307200000, 16, 0x0, 0x1, 0x0, 0x0, 0x0),
-	F_APCS_PLL(600000000, 31, 0x1, 0x4, 0x0, 0x0, 0x0),
+	F_APCS_PLL(1000000000, 31, 0x1, 0x4, 0x0, 0x0, 0x0),
 };
 
 static struct pll_clk a53ss_cci_pll = {
@@ -182,7 +182,7 @@ static struct pll_clk a53ss_cci_pll = {
 		.vdd_class = &vdd_sr2_pll,
 		.fmax = (unsigned long [VDD_SR2_PLL_NUM]) {
 			[VDD_SR2_PLL_SVS] = 1000000000,
-			[VDD_SR2_PLL_NOM] = 1900000000,
+			[VDD_SR2_PLL_NOM] = 2000000000,
 		},
 		.num_fmax = VDD_SR2_PLL_NUM,
 		CLK_INIT(a53ss_cci_pll.c),
@@ -208,7 +208,7 @@ static struct pll_freq_tbl apcs_c0_pll_freq[] = {
 	F_APCS_PLL(1171200000,  61, 0x0, 0x1, 0x0, 0x0, 0x0),
 	F_APCS_PLL(1209600000,  63, 0x0, 0x1, 0x0, 0x0, 0x0),
 	F_APCS_PLL(1305600000,  68, 0x0, 0x1, 0x0, 0x0, 0x0),
-	F_APCS_PLL(1968000000,  76, 0x0, 0x1, 0x0, 0x0, 0x0),
+	F_APCS_PLL(2568000000,  84, 0x0, 0x1, 0x0, 0x0, 0x0),
 };
 
 static struct pll_clk a53ss_c0_pll = {
@@ -239,7 +239,7 @@ static struct pll_clk a53ss_c0_pll = {
 		.vdd_class = &vdd_sr2_pll,
 		.fmax = (unsigned long [VDD_SR2_PLL_NUM]) {
 			[VDD_SR2_PLL_SVS] = 1000000000,
-			[VDD_SR2_PLL_NOM] = 1900000000,
+			[VDD_SR2_PLL_NOM] = 2600000000,
 		},
 		.num_fmax = VDD_SR2_PLL_NUM,
 		CLK_INIT(a53ss_c0_pll.c),
@@ -277,7 +277,7 @@ static struct pll_freq_tbl apcs_c1_pll_freq[] = {
 	F_APCS_PLL(1708800000, 89, 0x0, 0x1, 0x0, 0x0, 0x0),
 	F_APCS_PLL(1804800000, 94, 0x0, 0x1, 0x0, 0x0, 0x0),
 	F_APCS_PLL(1958400000, 102, 0x0, 0x1, 0x0, 0x0, 0x0),
-	F_APCS_PLL(2016000000, 105, 0x0, 0x1, 0x0, 0x0, 0x0),
+	F_APCS_PLL(2616000000, 120, 0x0, 0x1, 0x0, 0x0, 0x0),
 };
 
 static struct pll_clk a53ss_c1_pll = {
@@ -308,7 +308,7 @@ static struct pll_clk a53ss_c1_pll = {
 		.vdd_class = &vdd_hf_pll,
 		.fmax = (unsigned long [VDD_HF_PLL_NUM]) {
 			[VDD_HF_PLL_SVS] = 1000000000,
-			[VDD_HF_PLL_NOM] = 2020000000,
+			[VDD_HF_PLL_NOM] = 2616000000,
 		},
 		.num_fmax = VDD_HF_PLL_NUM,
 		CLK_INIT(a53ss_c1_pll.c),
@@ -451,7 +451,7 @@ static struct alpha_pll_masks pll_masks_p = {
  * Hence will have only one vco table entry
  */
 static struct alpha_pll_vco_tbl p_vco[] = {
-	VCO(0,  700000000, 1950000000),
+	VCO(0,  700000000, 1905000000),
 };
 
 /* Slewing plls won't allow to change vco_sel.
@@ -483,7 +483,7 @@ static struct alpha_pll_clk gpll3_clk_src = {
 		.parent = &xo_clk_src.c,
 		.dbg_name = "gpll3_clk_src",
 		.ops = &clk_ops_dyna_alpha_pll,
-		VDD_DIG_FMAX_MAP1(NOMINAL, 1850000000),
+		VDD_DIG_FMAX_MAP1(NOMINAL, 1808000000),
 		CLK_INIT(gpll3_clk_src.c),
 	},
 };
@@ -499,7 +499,7 @@ static struct pll_vote_clk gpll4_clk_src = {
 		.parent = &xo_clk_src.c,
 		.dbg_name = "gpll4_clk_src",
 		.ops = &clk_ops_pll_vote,
-		VDD_DIG_FMAX_MAP1(NOMINAL, 1850000000),
+		VDD_DIG_FMAX_MAP1(NOMINAL, 1808000000),
 		CLK_INIT(gpll4_clk_src.c),
 	},
 };
@@ -788,7 +788,7 @@ static struct clk_freq_tbl ftbl_gcc_oxili_gfx3d_clk_sdm439[] = {
 	F_SLEW( 450000000, 900000000,	  gpll3,	1,	0,	0),
 	F_SLEW( 510000000, 1020000000,	  gpll3,	1,	0,	0),
 	F_SLEW( 560000000, 1120000000,	  gpll3,	1,	0,	0),
-	F_SLEW( 921000000, 1850000000,	  gpll3,	1,	0,	0),
+	F_SLEW( 900000000, 1808000000,	  gpll3,	1,	0,	0),
 	F_END
 };
 
@@ -4548,7 +4548,7 @@ static int msm_gcc_probe(struct platform_device *pdev)
 			gpll3_clk_src.vco_tbl = p_vco;
 			gpll3_clk_src.num_vco = ARRAY_SIZE(p_vco);
 			gpll3_clk_src.c.fmax[VDD_DIG_LOW] = 800000000;
-			gpll3_clk_src.c.fmax[VDD_DIG_NOMINAL] = 1850000000;
+			gpll3_clk_src.c.fmax[VDD_DIG_NOMINAL] = 1808000000;
 			gfx3d_clk_src.freq_tbl =
 					ftbl_gcc_oxili_gfx3d_clk_sdm439;
 

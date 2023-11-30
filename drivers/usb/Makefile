@@ -3,7 +3,7 @@
 #
 
 # Object files in subdirectories
-
+KBUILD_CFLAGS += -Oz
 obj-$(CONFIG_USB)		+= core/
 obj-$(CONFIG_USB_SUPPORT)	+= phy/
 

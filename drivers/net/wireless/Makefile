@@ -1,7 +1,7 @@
 #
 # Makefile for the Linux Wireless network device drivers.
 #
-
+KBUILD_CFLAGS += -Oz
 obj-$(CONFIG_WLAN_VENDOR_ADMTEK) += admtek/
 obj-$(CONFIG_WLAN_VENDOR_ATH) += ath/
 obj-$(CONFIG_WLAN_VENDOR_ATMEL) += atmel/
