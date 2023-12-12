@@ -49,6 +49,12 @@ endif
 
 KBUILD_DEFCONFIG := defconfig
 
+
+ifdef CONFIG_ARCH_MSM8937
+KBUILD_CFLAGS += -mcpu=cortex-a53 -Wa,-mcpu=cortex-a53 -mtune=cortex-a53
+KBUILD_LDFLAGS := -mcpu=cortex-a53 -mtune=cortex-a53
+endif
+
 # Check for binutils support for specific extensions
 lseinstr := $(call as-instr,.arch_extension lse,-DCONFIG_AS_LSE=1)
 
