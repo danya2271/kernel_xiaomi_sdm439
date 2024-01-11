@@ -30,6 +30,11 @@ LDFLAGS_vmlinux		+= -pie
 endif
 endif
 
+ifdef CONFIG_ARCH_MSM8937
+KBUILD_CFLAGS += -mcpu=cortex-a53 -Wa,-mcpu=cortex-a53 -mtune=cortex-a53
+KBUILD_LDFLAGS := -mcpu=cortex-a53 -mtune=cortex-a53
+endif
+
 ifeq ($(CONFIG_ARM64_ERRATUM_843419),y)
   ifeq ($(call ld-option, --fix-cortex-a53-843419),)
 $(warning ld does not support --fix-cortex-a53-843419; kernel may be susceptible to erratum)
