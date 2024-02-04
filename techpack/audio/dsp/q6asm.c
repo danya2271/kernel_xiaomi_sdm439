@@ -524,6 +524,29 @@ static void config_debug_fs_write_cb(void)
 static void config_debug_fs_init(void)
 {
 }
+uint8_t q6asm_get_buf_index_from_token(uint32_t token)
+{
+	return 0;
+}
+EXPORT_SYMBOL(q6asm_get_buf_index_from_token);
+uint8_t q6asm_get_stream_id_from_token(uint32_t token)
+{
+	return 0;
+}
+EXPORT_SYMBOL(q6asm_get_stream_id_from_token);
+static inline void q6asm_update_token(u32 *token, u8 session_id, u8 stream_id,
+				      u8 buf_index, u8 dir, u8 nowait_flag)
+{
+}
+static inline int q6asm_get_flag_from_token(union asm_token_struct *asm_token,
+					    int flag_offset)
+{
+	return 0;
+}
+static int is_adsp_raise_event(uint32_t cmd)
+{
+	return 0;
+}
 #endif
 
 int q6asm_mmap_apr_dereg(void)
@@ -1218,6 +1241,7 @@ int q6asm_send_stream_cmd(struct audio_client *ac,
 		goto done;
 	}
 
+#ifdef CONFIG_DEBUG_FS
 	if (data->event_type >= ARRAY_SIZE(adsp_reg_event_opcode)) {
 		pr_err("%s: event %u out of boundary of array size of (%lu)\n",
 		       __func__, data->event_type,
@@ -1225,6 +1249,7 @@ int q6asm_send_stream_cmd(struct audio_client *ac,
 		rc = -EINVAL;
 		goto done;
 	}
+#endif
 
 	actual_sz = sizeof(struct apr_hdr) + data->payload_len;
 	if (actual_sz > U32_MAX) {
@@ -1249,8 +1274,10 @@ int q6asm_send_stream_cmd(struct audio_client *ac,
 
 	q6asm_add_hdr_async(ac, &hdr, sz, TRUE);
 	atomic_set(&ac->cmd_state_pp, -1);
+#ifdef CONFIG_DEBUG_FS
 	hdr.opcode = adsp_reg_event_opcode[data->event_type];
 	memcpy(asm_params, &hdr, sizeof(struct apr_hdr));
+#endif
 	memcpy(asm_params + sizeof(struct apr_hdr),
 		data->payload, data->payload_len);
 	rc = apr_send_pkt(ac->apr, (uint32_t *) asm_params);
@@ -2034,6 +2061,7 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 					pr_err("%s: cmd = 0x%x returned error = 0x%x\n",
 					__func__, payload[0], payload[1]);
 				if (wakeup_flag) {
+#ifdef CONFIG_DEBUG_FS
 					if ((is_adsp_reg_event(payload[0]) >= 0)
 					|| (payload[0] ==
 					ASM_STREAM_CMD_SET_PP_PARAMS_V2))
@@ -2043,12 +2071,14 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 						atomic_set(&ac->cmd_state,
 							payload[1]);
 					wake_up(&ac->cmd_wait);
+#endif
 				}
 				spin_unlock_irqrestore(
 					&(session[session_id].session_lock),
 					flags);
 				return 0;
 			}
+#ifdef CONFIG_DEBUG_FS
 			if ((is_adsp_reg_event(payload[0]) >= 0) ||
 			    (payload[0] == ASM_STREAM_CMD_SET_PP_PARAMS_V2)) {
 				if (atomic_read(&ac->cmd_state_pp) &&
@@ -2063,6 +2093,7 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 					wake_up(&ac->cmd_wait);
 				}
 			}
+#endif
 			if (ac->cb)
 				ac->cb(data->opcode, data->token,
 					(uint32_t *)data->payload, ac->priv);
@@ -2863,7 +2894,9 @@ static int __q6asm_open_read(struct audio_client *ac,
 	switch (format) {
 	case FORMAT_LINEAR_PCM:
 		open.mode_flags |= 0x00;
+#ifdef CONFIG_DEBUG_FS
 		open.enc_cfg_id = q6asm_get_pcm_format_id(pcm_format_block_ver);
+#endif
 		if (ts_mode)
 			open.mode_flags |= ABSOLUTE_TIMESTAMP_ENABLE;
 		break;
@@ -3201,7 +3234,9 @@ static int __q6asm_open_write(struct audio_client *ac, uint32_t format,
 	}
 	switch (format) {
 	case FORMAT_LINEAR_PCM:
+#ifdef CONFIG_DEBUG_FS
 		open.dec_fmt_id = q6asm_get_pcm_format_id(pcm_format_block_ver);
+#endif
 		break;
 	case FORMAT_MPEG4_AAC:
 		open.dec_fmt_id = ASM_MEDIA_FMT_AAC_V2;

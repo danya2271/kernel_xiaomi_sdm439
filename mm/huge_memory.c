@@ -1904,7 +1904,6 @@ static void unmap_page(struct page *page)
 		if (page_count(page) == 1)
 			return;
 
-		try_to_unmap(page + i, ttu_flags);
 	}
 
 	VM_WARN_ON_ONCE_PAGE(page_mapped(page), page);

@@ -296,6 +296,7 @@ TRACE_EVENT(rot_bw_ao_as_context,
 );
 
 #define SDE_ROT_TRACE_EVTLOG_SIZE	15
+#ifdef CONFIG_DEBUG_FS
 TRACE_EVENT(sde_rot_evtlog,
 	TP_PROTO(const char *tag, u32 tag_id, u32 cnt, u32 data[]),
 	TP_ARGS(tag, tag_id, cnt, data),
@@ -328,7 +329,7 @@ TRACE_EVENT(sde_rot_evtlog,
 			__entry->data[12], __entry->data[13],
 			__entry->data[14])
 )
-
+#endif
 #endif /* if !defined(TRACE_SDE_ROTATOR_H) ||
 	*		defined(TRACE_HEADER_MULTI_READ)
 	*/

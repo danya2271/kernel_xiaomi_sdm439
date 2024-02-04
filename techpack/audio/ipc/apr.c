@@ -1113,11 +1113,6 @@ static int __init apr_debug_init(void)
 						 &apr_debug_ops);
 	return 0;
 }
-#else
-static int __init apr_debug_init(void)
-(
-	return 0;
-)
 #endif
 
 static void apr_cleanup(void)
@@ -1173,7 +1168,11 @@ static int apr_probe(struct platform_device *pdev)
 	apr_tal_init();
 	apr_dev_ptr = &pdev->dev;
 	INIT_DELAYED_WORK(&add_chld_dev_work, apr_add_child_devices);
+#ifdef CONFIG_DEBUG_FS
 	return apr_debug_init();
+#else
+	return 0;
+#endif
 }
 
 static int apr_remove(struct platform_device *pdev)

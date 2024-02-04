@@ -20,16 +20,18 @@ static struct miscdevice audio_g711alaw_misc;
 static struct ws_mgr audio_g711_ws_mgr;
 
 static const struct file_operations audio_g711_debug_fops = {
+#ifdef CONFIG_DEBUG_FS
 	.read = audio_aio_debug_read,
 	.open = audio_aio_debug_open,
+#endif
 };
-
+#ifdef CONFIG_DEBUG_FS
 static struct dentry *config_debugfs_create_file(const char *name, void *data)
 {
 	return debugfs_create_file(name, S_IFREG | 0444,
 				NULL, (void *)data, &audio_g711_debug_fops);
 }
-
+#endif
 static int g711_channel_map(u8 *channel_mapping, uint32_t channels);
 
 static long audio_ioctl_shared(struct file *file, unsigned int cmd,
@@ -285,7 +287,7 @@ static int audio_open(struct inode *inode, struct file *file)
 		rc = -EACCES;
 		goto fail;
 	}
-
+#ifdef CONFIG_DEBUG_FS
 	snprintf(name, sizeof(name), "msm_g711_%04x", audio->ac->session);
 	audio->dentry = config_debugfs_create_file(name, (void *)audio);
 
@@ -294,6 +296,7 @@ static int audio_open(struct inode *inode, struct file *file)
 	pr_debug("%s: g711dec success mode[%d]session[%d]\n", __func__,
 						audio->feedback,
 						audio->ac->session);
+#endif
 	return rc;
 fail:
 	q6asm_audio_client_free(audio->ac);

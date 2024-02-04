@@ -483,10 +483,10 @@ static int sde_smmu_fault_handler(struct iommu_domain *domain,
 	SDEROT_ERR("trigger rotator dump, iova=0x%08lx, flags=0x%x\n",
 			iova, flags);
 	SDEROT_ERR("SMMU device:%s", sde_smmu->dev->kobj.name);
-
+#ifdef CONFIG_DEBUG_FS
 	/* generate dump, but no panic */
 	sde_rot_evtlog_tout_handler(false, __func__, "rot", "vbif_dbg_bus");
-
+#endif
 	/*
 	 * return -ENOSYS to allow smmu driver to dump out useful
 	 * debug info.

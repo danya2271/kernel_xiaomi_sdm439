@@ -76,8 +76,7 @@ const char *BannedApps[] =
 {
 	"com.android.adservices.api",
 	"atrace",
-	"ru.nspk.mirpay:AppMetrica",
-	"com.avito.android:Metrica",
+	"android:Metrica",
 	"bugreport",
 	"bugreportz",
 	"debuggerd",
@@ -89,7 +88,15 @@ const char *BannedApps[] =
 	"lpdumpd",
 	"statsd",
 	"com.android.os.statsd",
-	"ipsec_mon"
+	"ipsec_mon",
+	"com.qti.qualcomm.mstatssystemservice",
+	"traced",
+	"traced_probes",
+	"com.xiaomi.mtb",
+	"millet_monitorSIG",
+	"millet_monitorBINDER",
+	"com.google.android.partnersetup",
+	"ip6tables-restore—noflush-w-v"
 };
 const size_t szBannedApps = sizeof(BannedApps) / sizeof(*BannedApps);
 // Export these symbols so the rest of our code can find it.

@@ -518,6 +518,8 @@ fail:
 }
 
 #else
+static int ipa_mhi_read_write_host(enum ipa_mhi_dma_dir dir, void *dev_addr,
+	u64 host_addr, int size) {}
 static void ipa_mhi_debugfs_init(void) {}
 static void ipa_mhi_debugfs_destroy(void) {}
 #endif /* CONFIG_DEBUG_FS */
@@ -2482,12 +2484,12 @@ int ipa_mhi_destroy_all_channels(void)
 	IPA_MHI_FUNC_EXIT();
 	return 0;
 }
-
+#ifdef CONFIG_DEBUG_FS
 static void ipa_mhi_debugfs_destroy(void)
 {
 	debugfs_remove_recursive(dent);
 }
-
+#endif
 static void ipa_mhi_delete_rm_resources(void)
 {
 	int res;
@@ -2853,11 +2855,13 @@ int ipa_mhi_init(struct ipa_mhi_init_params *params)
 		if (ipa_uc_state_check() == 0)
 			ipa_mhi_set_state(IPA_MHI_STATE_READY);
 	}
+#ifdef CONFIG_DEBUG_FS
 	/* Initialize debugfs */
 	ipa_mhi_debugfs_init();
 
 	ipa_register_client_callback(&ipa_mhi_set_lock_unlock, NULL,
 				IPA_CLIENT_MHI_PROD);
+#endif
 	IPA_MHI_FUNC_EXIT();
 	return 0;
 
