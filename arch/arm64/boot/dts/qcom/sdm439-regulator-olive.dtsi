@@ -370,7 +370,7 @@
 		};
 	};
 };
-#define MAX_VOLT 960000
+#define MAX_VOLT 950000
 &spmi_bus {
 	qcom,pm8953@1 {
 		/* PM8953 S5 + S6 = VDD_APC_supply */

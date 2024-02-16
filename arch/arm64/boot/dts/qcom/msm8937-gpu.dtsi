@@ -140,12 +140,6 @@
 			};
 		};
 
-		qcom,gpu-coresights {
-			#address-cells = <1>;
-			#size-cells = <0>;
-			compatible = "qcom,gpu-coresight";
-		};
-
 		/* Power levels */
 		qcom,gpu-pwrlevels {
 			#address-cells = <1>;
